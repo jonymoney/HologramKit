@@ -6,14 +6,18 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		F5D51F612F45B0000049C49D /* HologramKit in Frameworks */ = {isa = PBXBuildFile; productRef = F5D51F602F45B0000049C49D /* HologramKit */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
-		F5D51F442F45AEE80049C49D /* Golden Ticket.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Golden Ticket.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		F5D51F442F45AEE80049C49D /* CardLab.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "CardLab.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		F5D51F462F45AEE80049C49D /* Golden Ticket */ = {
+		F5D51F462F45AEE80049C49D /* CardLab */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			path = "Golden Ticket";
+			path = "CardLab";
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -23,6 +27,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F5D51F612F45B0000049C49D /* HologramKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -32,7 +37,7 @@
 		F5D51F3B2F45AEE80049C49D = {
 			isa = PBXGroup;
 			children = (
-				F5D51F462F45AEE80049C49D /* Golden Ticket */,
+				F5D51F462F45AEE80049C49D /* CardLab */,
 				F5D51F452F45AEE80049C49D /* Products */,
 			);
 			sourceTree = "<group>";
@@ -40,7 +45,7 @@
 		F5D51F452F45AEE80049C49D /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				F5D51F442F45AEE80049C49D /* Golden Ticket.app */,
+				F5D51F442F45AEE80049C49D /* CardLab.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -48,9 +53,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		F5D51F432F45AEE80049C49D /* Golden Ticket */ = {
+		F5D51F432F45AEE80049C49D /* CardLab */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = F5D51F4F2F45AEE90049C49D /* Build configuration list for PBXNativeTarget "Golden Ticket" */;
+			buildConfigurationList = F5D51F4F2F45AEE90049C49D /* Build configuration list for PBXNativeTarget "CardLab" */;
 			buildPhases = (
 				F5D51F402F45AEE80049C49D /* Sources */,
 				F5D51F412F45AEE80049C49D /* Frameworks */,
@@ -61,13 +66,14 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				F5D51F462F45AEE80049C49D /* Golden Ticket */,
+				F5D51F462F45AEE80049C49D /* CardLab */,
 			);
-			name = "Golden Ticket";
+			name = "CardLab";
 			packageProductDependencies = (
+				F5D51F602F45B0000049C49D /* HologramKit */,
 			);
-			productName = "Golden Ticket";
-			productReference = F5D51F442F45AEE80049C49D /* Golden Ticket.app */;
+			productName = "CardLab";
+			productReference = F5D51F442F45AEE80049C49D /* CardLab.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -85,7 +91,7 @@
 					};
 				};
 			};
-			buildConfigurationList = F5D51F3F2F45AEE80049C49D /* Build configuration list for PBXProject "Golden Ticket" */;
+			buildConfigurationList = F5D51F3F2F45AEE80049C49D /* Build configuration list for PBXProject "CardLab" */;
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -98,8 +104,11 @@
 			productRefGroup = F5D51F452F45AEE80049C49D /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
+			packages = (
+				F5D51F5E2F45B0000049C49D /* XCLocalSwiftPackageReference ".." */,
+			);
 			targets = (
-				F5D51F432F45AEE80049C49D /* Golden Ticket */,
+				F5D51F432F45AEE80049C49D /* CardLab */,
 			);
 		};
 /* End PBXProject section */
@@ -253,20 +262,20 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = S89P27T8CF;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = UIInterfaceOrientationPortrait;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "money.jony.exploration.Golden-Ticket";
+				PRODUCT_BUNDLE_IDENTIFIER = "money.jony.exploration.CardLab";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
@@ -285,20 +294,20 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = S89P27T8CF;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = UIInterfaceOrientationPortrait;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "money.jony.exploration.Golden-Ticket";
+				PRODUCT_BUNDLE_IDENTIFIER = "money.jony.exploration.CardLab";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
@@ -313,7 +322,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		F5D51F3F2F45AEE80049C49D /* Build configuration list for PBXProject "Golden Ticket" */ = {
+		F5D51F3F2F45AEE80049C49D /* Build configuration list for PBXProject "CardLab" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				F5D51F4D2F45AEE90049C49D /* Debug */,
@@ -322,7 +331,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		F5D51F4F2F45AEE90049C49D /* Build configuration list for PBXNativeTarget "Golden Ticket" */ = {
+		F5D51F4F2F45AEE90049C49D /* Build configuration list for PBXNativeTarget "CardLab" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				F5D51F502F45AEE90049C49D /* Debug */,
@@ -332,6 +341,21 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCLocalSwiftPackageReference section */
+		F5D51F5E2F45B0000049C49D /* XCLocalSwiftPackageReference ".." */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = "..";
+		};
+/* End XCLocalSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		F5D51F602F45B0000049C49D /* HologramKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F5D51F5E2F45B0000049C49D /* XCLocalSwiftPackageReference ".." */;
+			productName = HologramKit;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = F5D51F3C2F45AEE80049C49D /* Project object */;
 }
