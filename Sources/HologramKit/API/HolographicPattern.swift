@@ -7,4 +7,7 @@ public enum HolographicPattern: Int, CaseIterable, Codable, Sendable {
     case radial = 2
     case linear = 3
     case crisscross = 4
+    case fluid = 5
+    case microFacet = 6
+    case waves = 7
 }

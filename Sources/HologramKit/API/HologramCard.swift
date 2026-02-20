@@ -54,7 +54,8 @@ public struct HologramCard: View {
             let renderer = LayerRenderer(
                 cardSize: cardSize,
                 cornerRadius: cornerRadius,
-                isExploded: isExploded
+                isExploded: isExploded,
+                parallaxIntensity: parallaxIntensity
             )
 
             ZStack {
@@ -133,6 +134,8 @@ public struct HologramCard: View {
         case .sparkle: return "Sparkle"
         case .brushedMetal: return "Brushed Metal"
         case .anisotropicLight: return "Aniso Light"
+        case .plasticFoil: return "Plastic Foil"
+        case .group(_, let name): return name ?? "Group"
         }
     }
 }

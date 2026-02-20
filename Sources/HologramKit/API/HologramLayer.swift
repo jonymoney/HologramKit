@@ -21,6 +21,7 @@ public struct HologramLayer: Identifiable {
     var sparkleConfig: SparkleConfig = SparkleConfig()
     var brushedMetalConfig: BrushedMetalConfig = BrushedMetalConfig()
     var anisotropicLightConfig: AnisotropicLightConfig = AnisotropicLightConfig()
+    var plasticFoilConfig: PlasticFoilConfig = PlasticFoilConfig()
 
     enum Kind {
         case base(Color)
@@ -31,6 +32,8 @@ public struct HologramLayer: Identifiable {
         case sparkle
         case brushedMetal(Color)
         case anisotropicLight
+        case plasticFoil
+        case group([HologramLayer], String?)
     }
 
     // MARK: - Factory Methods
@@ -52,9 +55,7 @@ public struct HologramLayer: Identifiable {
 
     /// A rainbow holographic foil effect driven by device tilt.
     public static func holographicFoil(_ baseColor: Color = Color(red: 0.85, green: 0.65, blue: 0.13)) -> HologramLayer {
-        var layer = HologramLayer(kind: .holographicFoil(baseColor))
-        layer.parallaxFactor = 0.5
-        return layer
+        HologramLayer(kind: .holographicFoil(baseColor))
     }
 
     /// A tilt-tracking specular highlight.
@@ -82,32 +83,61 @@ public struct HologramLayer: Identifiable {
         HologramLayer(kind: .anisotropicLight)
     }
 
+    /// A transparent plastic foil overlay with visible edge rims and a sliding specular sheen.
+    public static func plasticFoil() -> HologramLayer {
+        HologramLayer(kind: .plasticFoil)
+    }
+
+    /// A compositing group that isolates blend modes within its sublayers.
+    /// Sublayer parallax is relative within the group's local coordinate space.
+    public static func group(
+        _ name: String? = nil,
+        @HologramLayerBuilder content: () -> [HologramLayer]
+    ) -> HologramLayer {
+        HologramLayer(kind: .group(content(), name))
+    }
+
     // MARK: - Universal Modifiers
 
-    /// Parallax movement factor relative to device tilt. 0 = no movement, 1 = maximum.
+    /// How much this layer shifts in response to device tilt, creating a depth illusion.
+    ///
+    /// - Parameter factor: Movement amount. **Range: `0.0 ... 1.0`**.
+    ///   `0` = fixed (background feel), `1` = maximum movement (foreground feel).
+    ///   Default: `0`.
     public func parallax(_ factor: Double) -> HologramLayer {
         var copy = self
         copy.parallaxFactor = factor
         return copy
     }
 
-    /// Blend mode for compositing this layer.
+    /// Blend mode for compositing this layer onto the layers below it.
+    ///
+    /// - Parameter mode: Any SwiftUI `BlendMode` (e.g. `.overlay`, `.screen`, `.plusLighter`).
+    ///   Default: layer-type dependent (`.overlay` for holographic foil, `.screen` for specular, etc.).
     public func blendMode(_ mode: BlendMode) -> HologramLayer {
         var copy = self
         copy.layerBlendMode = mode
         return copy
     }
 
-    /// Opacity of the layer.
+    /// Opacity of the entire layer.
+    ///
+    /// - Parameter value: **Range: `0.0 ... 1.0`**. `0` = invisible, `1` = fully opaque. Default: `1.0`.
     public func opacity(_ value: Double) -> HologramLayer {
         var copy = self
         copy.layerOpacity = value
         return copy
     }
 
-    // MARK: - Holographic Foil Modifiers
+    // MARK: - Shared Effect Modifiers
 
-    /// Holographic foil intensity (0...1). No-op on other layer types.
+    /// Effect intensity / brightness.
+    ///
+    /// Applies to: `holographicFoil`, `specularHighlight`, `brushedMetal`, `anisotropicLight`, `plasticFoil`.
+    /// No-op on other layer types.
+    ///
+    /// - Parameter value: **Range: `0.0 ... 1.0`**. `0` = invisible, `1` = full strength.
+    ///   Defaults: foil `0.8`, specular `0.7`, brushedMetal `0.6`, anisotropicLight `0.7`, plasticFoil `0.6`.
     public func intensity(_ value: Float) -> HologramLayer {
         var copy = self
         switch copy.kind {
@@ -115,12 +145,18 @@ public struct HologramLayer: Identifiable {
         case .specularHighlight: copy.specularConfig.intensity = value
         case .brushedMetal: copy.brushedMetalConfig.reflectivity = value
         case .anisotropicLight: copy.anisotropicLightConfig.intensity = value
+        case .plasticFoil: copy.plasticFoilConfig.intensity = value
         default: break
         }
         return copy
     }
 
-    /// Scale of the holographic pattern or sparkle size. No-op on other layer types.
+    /// Scale of the holographic pattern or brushed-metal grain.
+    ///
+    /// Applies to: `holographicFoil`, `sparkle`, `brushedMetal`. No-op on other layer types.
+    ///
+    /// - Parameter value: **Range: `0.1 ... 5.0`**. `1.0` = natural size.
+    ///   Lower = tighter/finer, higher = larger/coarser. Default: `1.0`.
     public func scale(_ value: Float) -> HologramLayer {
         var copy = self
         switch copy.kind {
@@ -132,7 +168,13 @@ public struct HologramLayer: Identifiable {
         return copy
     }
 
-    /// Animation speed for holographic shift, sparkle twinkle. No-op on other layer types.
+    /// Animation speed for time-driven effects.
+    ///
+    /// Applies to: `holographicFoil` (color shift speed), `sparkle` (twinkle rate).
+    /// No-op on other layer types.
+    ///
+    /// - Parameter value: **Range: `0.0 ... 10.0`**. `0` = frozen, higher = faster animation.
+    ///   Defaults: foil `0.5`, sparkle `3.0`.
     public func speed(_ value: Float) -> HologramLayer {
         var copy = self
         switch copy.kind {
@@ -143,7 +185,11 @@ public struct HologramLayer: Identifiable {
         return copy
     }
 
-    /// Color saturation of the holographic rainbow (0...1). No-op on other layer types.
+    /// Color saturation of the holographic rainbow.
+    ///
+    /// Applies to: `holographicFoil`. No-op on other layer types.
+    ///
+    /// - Parameter value: **Range: `0.0 ... 1.0`**. `0` = monochrome, `1` = vivid rainbow. Default: `0.9`.
     public func saturation(_ value: Float) -> HologramLayer {
         var copy = self
         if case .holographicFoil = copy.kind {
@@ -152,7 +198,19 @@ public struct HologramLayer: Identifiable {
         return copy
     }
 
-    /// Holographic foil pattern style. No-op on other layer types.
+    /// Holographic foil pattern style.
+    ///
+    /// Applies to: `holographicFoil`. No-op on other layer types.
+    ///
+    /// - Parameter pattern: Default: `.diagonal`. Options:
+    ///   - `.diagonal` — classic angled rainbow bands
+    ///   - `.diamond` — concentric diamond shapes from center
+    ///   - `.radial` — circular rings radiating outward
+    ///   - `.linear` — horizontal color bands
+    ///   - `.crisscross` — grid of intersecting sine waves
+    ///   - `.fluid` — organic marble/oil-slick swirls (domain-warped noise)
+    ///   - `.microFacet` — tiny pyramid cells, each catching light at a different angle
+    ///   - `.waves` — overlapping fine-line interference fringes (credit card hologram style)
     public func pattern(_ pattern: HolographicPattern) -> HologramLayer {
         var copy = self
         if case .holographicFoil = copy.kind {
@@ -161,21 +219,33 @@ public struct HologramLayer: Identifiable {
         return copy
     }
 
-    // MARK: - Specular Modifiers
-
-    /// Specular highlight spot size (0.05...1). No-op on other layer types.
+    /// Size of the highlight spot or sheen spread.
+    ///
+    /// Applies to: `specularHighlight`, `sparkle`, `anisotropicLight`, `plasticFoil`.
+    /// No-op on other layer types.
+    ///
+    /// - Parameter value: **Range: `0.05 ... 1.0`**.
+    ///   Lower = tighter/smaller spot, higher = broader/softer.
+    ///   Defaults: specular `0.35`, sparkle `1.0`, anisotropicLight `0.35`, plasticFoil `0.5`.
     public func size(_ value: Float) -> HologramLayer {
         var copy = self
         switch copy.kind {
         case .specularHighlight: copy.specularConfig.size = value
         case .sparkle: copy.sparkleConfig.size = value
         case .anisotropicLight: copy.anisotropicLightConfig.size = value
+        case .plasticFoil: copy.plasticFoilConfig.shineSize = value
         default: break
         }
         return copy
     }
 
-    /// Falloff curve for specular highlight or anisotropic light. No-op on other layer types.
+    /// Falloff curve that controls how sharply the highlight fades at its edges.
+    ///
+    /// Applies to: `specularHighlight`, `anisotropicLight`. No-op on other layer types.
+    ///
+    /// - Parameter value: **Range: `0.1 ... 5.0`**.
+    ///   Lower = softer gradient, higher = sharper cutoff.
+    ///   Defaults: specular `1.2`, anisotropicLight `2.0`.
     public func falloff(_ value: Float) -> HologramLayer {
         var copy = self
         switch copy.kind {
@@ -186,7 +256,11 @@ public struct HologramLayer: Identifiable {
         return copy
     }
 
-    /// Light/highlight color. No-op on other layer types.
+    /// Tint color of the light or highlight.
+    ///
+    /// Applies to: `specularHighlight`, `anisotropicLight`. No-op on other layer types.
+    ///
+    /// - Parameter value: Any SwiftUI `Color`. Default: `.white`.
     public func color(_ value: Color) -> HologramLayer {
         var copy = self
         switch copy.kind {
@@ -199,7 +273,11 @@ public struct HologramLayer: Identifiable {
 
     // MARK: - Sparkle Modifiers
 
-    /// Sparkle particle density (0...1). No-op on other layer types.
+    /// Sparkle particle density — how many glitter points are visible.
+    ///
+    /// Applies to: `sparkle`. No-op on other layer types.
+    ///
+    /// - Parameter value: **Range: `0.0 ... 1.0`**. `0` = very few, `1` = dense glitter. Default: `0.5`.
     public func density(_ value: Float) -> HologramLayer {
         var copy = self
         if case .sparkle = copy.kind {
@@ -208,9 +286,14 @@ public struct HologramLayer: Identifiable {
         return copy
     }
 
-    // MARK: - Brushed Metal Modifiers
+    // MARK: - Brushed Metal / Anisotropic Modifiers
 
-    /// Direction of the brush grain in radians (0 = horizontal). No-op on other layer types.
+    /// Direction of the brush grain.
+    ///
+    /// Applies to: `brushedMetal`, `anisotropicLight`. No-op on other layer types.
+    ///
+    /// - Parameter radians: Angle in radians. **Range: `0 ... 2π`**.
+    ///   `0` = horizontal, `π/2` = vertical. Default: `0`.
     public func brushAngle(_ radians: Float) -> HologramLayer {
         var copy = self
         switch copy.kind {
@@ -221,13 +304,32 @@ public struct HologramLayer: Identifiable {
         return copy
     }
 
-    // MARK: - Anisotropic Light Modifiers
-
-    /// Anisotropic stretch ratio (1 = circular, higher = more elongated streak). No-op on other layer types.
+    /// Anisotropic stretch ratio — how elongated the light streak is along the brush direction.
+    ///
+    /// Applies to: `anisotropicLight`. No-op on other layer types.
+    ///
+    /// - Parameter value: **Range: `1.0 ... 20.0`**.
+    ///   `1` = circular, higher = longer streak. Default: `8.0`.
     public func stretch(_ value: Float) -> HologramLayer {
         var copy = self
         if case .anisotropicLight = copy.kind {
             copy.anisotropicLightConfig.stretch = value
+        }
+        return copy
+    }
+
+    // MARK: - Plastic Foil Modifiers
+
+    /// Width of the edge rim glow on the plastic foil.
+    ///
+    /// Applies to: `plasticFoil`. No-op on other layer types.
+    ///
+    /// - Parameter value: **Range: `0.01 ... 0.2`** (fraction of card width).
+    ///   Lower = thinner rim, higher = wider glow. Default: `0.06`.
+    public func edgeWidth(_ value: Float) -> HologramLayer {
+        var copy = self
+        if case .plasticFoil = copy.kind {
+            copy.plasticFoilConfig.edgeWidth = value
         }
         return copy
     }
@@ -269,4 +371,10 @@ struct AnisotropicLightConfig {
     var brushAngle: Float = 0.0
     var softness: Float = 2.0
     var color: Color = .white
+}
+
+struct PlasticFoilConfig {
+    var edgeWidth: Float = 0.06
+    var intensity: Float = 0.6
+    var shineSize: Float = 0.5
 }

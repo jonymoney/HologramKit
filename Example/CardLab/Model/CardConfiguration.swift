@@ -8,10 +8,10 @@ class CardConfiguration {
     var cardHeight: CGFloat = 420
 
     // MARK: - Parallax
-    var parallaxIntensity: CGFloat = 20
+    var parallaxIntensity: CGFloat = 50
 
     // MARK: - Motion
-    var sensitivity: Float = 1.0
+    var sensitivity: Float = 2.20
     var smoothingFactor: Float = 0.15
     var tiltIntensity: Double = 15
 

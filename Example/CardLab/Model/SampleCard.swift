@@ -54,58 +54,67 @@ extension SampleCard {
             name: "Mount Fuji",
             subtitle: "JAPAN 2026",
             backgroundColor: .white,
-            cardBaseColor: Color(red: 0.85, green: 0.65, blue: 0.13)
+            cardBaseColor: Color(red: 82/255, green: 214/255, blue: 252/255)
         ) { config in
-            HologramLayer.base(config.cardBaseColor)
 
-            HologramLayer.image(Image("sun"))
-                .parallax(0.1)
-            HologramLayer.image(Image("mount"))
-                .parallax(0.25)
-            HologramLayer.image(Image("flower"))
-                .parallax(0.4)
-
-            HologramLayer.content {
-                VStack(spacing: 8) {
-                    Text("Mount Fuji")
-                        .font(.system(size: 30, weight: .bold))
-                    Text("JAPAN 2026")
-                        .font(.system(size: 12, weight: .medium, design: .monospaced))
-                        .tracking(4)
-                    Spacer()
-                }
-                .padding(.top)
-                .foregroundStyle(.white.opacity(0.9))
+            HologramLayer.group("Sun") {
+                HologramLayer.base(config.cardBaseColor)
+                HologramLayer.image(Image("sun"))
+                    .parallax(0.1)
             }
-            .parallax(0.2)
+//            .parallax(0.25)
+            
+            HologramLayer.group("Mountain") {
+//                HologramLayer.plasticFoil()
+                HologramLayer.holographicFoil(config.cardBaseColor)
+                    .intensity(0.2)
+                    .scale(1.0)
+                    .speed(0.5)
+                    .saturation(0.9)
+                    .pattern(.microFacet)
+                HologramLayer.image(Image("mount"))
 
-            HologramLayer.holographicFoil(config.cardBaseColor)
-                .parallax(0.5)
-                .intensity(0.8)
-                .scale(1.0)
-                .speed(0.5)
-                .saturation(0.9)
-                .pattern(.diagonal)
 
-            HologramLayer.specularHighlight()
-                .parallax(0.8)
-                .intensity(0.7)
-                .size(0.35)
-                .falloff(1.2)
-                .color(.white)
+            }
+            .parallax(0.45)
 
-            HologramLayer.sparkle()
-                .parallax(1.0)
-                .density(0.5)
-                .speed(3.0)
-                .size(1.0)
+//            HologramLayer.group("Flowers") {
+//                HologramLayer.image(Image("flower"))
+//                HologramLayer.sparkle()
+//                    .density(0.5)
+//                    .speed(3.0)
+//                    .size(1.0)
+//            }
+//            .parallax(0.4)
+
+//            HologramLayer.content {
+//                VStack(spacing: 8) {
+//                    Text("Mount Fuji")
+//                        .font(.system(size: 30, weight: .bold))
+//                    Text("JAPAN 2026")
+//                        .font(.system(size: 12, weight: .medium, design: .monospaced))
+//                        .tracking(4)
+//                    Spacer()
+//                }
+//                .padding(.top)
+//                .foregroundStyle(.white.opacity(0.9))
+//            }
+//            .parallax(0.2)
+
+
+//            HologramLayer.specularHighlight()
+//                .parallax(0.8)
+//                .intensity(0.4)
+//                .size(0.35)
+//                .falloff(1.2)
+//                .color(.white)
         },
 
         // MARK: Nova – Brushed Silver Credit Card
 
         SampleCard(
             name: "Nova",
-            subtitle: "Brushed Silver",
+            subtitle: "Brushed Metal",
             backgroundColor: Color(white: 0.12),
             cardBaseColor: Color(red: 0.78, green: 0.80, blue: 0.83),
             cornerRadius: 16,

@@ -34,7 +34,9 @@ struct HomeView: View {
         let miniWidth = 160.0
         let miniHeight = sample.cardHeight * scale
 
-        return VStack(spacing: 8) {
+        return VStack(spacing: 12) {
+            Spacer(minLength: 0)
+
             HologramCard {
                 for layer in sample.content(sample.makeDefaultConfig()) {
                     layer
@@ -44,11 +46,13 @@ struct HomeView: View {
             .hologramCornerRadius(sample.cornerRadius * scale)
             .allowsHitTesting(false)
 
-            Text(sample.name)
-                .font(.headline)
-            Text(sample.subtitle)
-                .font(.caption)
-                .foregroundStyle(.secondary)
+            VStack(spacing: 2) {
+                Text(sample.name)
+                    .font(.headline)
+                Text(sample.subtitle)
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
         }
     }
 }

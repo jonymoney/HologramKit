@@ -4,6 +4,7 @@ struct LayerRenderer {
     let cardSize: CGSize
     let cornerRadius: CGFloat
     let isExploded: Bool
+    let parallaxIntensity: CGFloat
 
     @ViewBuilder
     func render(
@@ -131,7 +132,54 @@ struct LayerRenderer {
                     .blendMode(.screen)
             }
             .applyBlendMode(layer.layerBlendMode, isExploded: isExploded)
+
+        case .plasticFoil:
+            ZStack {
+                if isExploded {
+                    RoundedRectangle(cornerRadius: cornerRadius)
+                        .fill(Color(white: 0.1))
+                }
+                RoundedRectangle(cornerRadius: cornerRadius)
+                    .fill(.black)
+                    .colorEffect(
+                        HologramShaderLibrary.plasticFoil(
+                            .float2(Float(cardSize.width), Float(cardSize.height)),
+                            .float2(tiltR, tiltP),
+                            .float(layer.plasticFoilConfig.edgeWidth),
+                            .float(layer.plasticFoilConfig.intensity),
+                            .float(layer.plasticFoilConfig.shineSize),
+                            .float(Float(cornerRadius))
+                        )
+                    )
+                    .blendMode(.screen)
+            }
+            .applyBlendMode(layer.layerBlendMode, isExploded: isExploded)
+
+        case .group(let sublayers, _):
+            ZStack {
+                ForEach(Array(sublayers.enumerated()), id: \.element.id) { _, sublayer in
+                    AnyView(
+                        render(layer: sublayer, tiltR: tiltR, tiltP: tiltP, time: time)
+                            .offset(sublayerParallaxOffset(
+                                tiltR: tiltR, tiltP: tiltP, factor: sublayer.parallaxFactor
+                            ))
+                    )
+                }
+            }
+            .compositingGroup()
+            .opacity(layer.layerOpacity)
+            .applyBlendMode(layer.layerBlendMode, isExploded: isExploded)
         }
+    }
+
+    private func sublayerParallaxOffset(
+        tiltR: Float, tiltP: Float, factor: Double
+    ) -> CGSize {
+        guard !isExploded else { return .zero }
+        return CGSize(
+            width: CGFloat(tiltR) * parallaxIntensity * factor,
+            height: CGFloat(tiltP) * parallaxIntensity * factor
+        )
     }
 }
 
