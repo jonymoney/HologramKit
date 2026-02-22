@@ -198,6 +198,19 @@ public struct HologramLayer: Identifiable {
         return copy
     }
 
+    /// How see-through the holographic foil is.
+    ///
+    /// Applies to: `holographicFoil`. No-op on other layer types.
+    ///
+    /// - Parameter value: **Range: `0.0 ... 1.0`**. `0` = fully opaque, `1` = fully transparent. Default: `0.5`.
+    public func transparency(_ value: Float) -> HologramLayer {
+        var copy = self
+        if case .holographicFoil = copy.kind {
+            copy.foilConfig.transparency = value
+        }
+        return copy
+    }
+
     /// Holographic foil pattern style.
     ///
     /// Applies to: `holographicFoil`. No-op on other layer types.
@@ -342,6 +355,7 @@ struct HoloFoilConfig {
     var scale: Float = 1.0
     var speed: Float = 0.5
     var saturation: Float = 0.9
+    var transparency: Float = 0.5
     var pattern: HolographicPattern = .diagonal
 }
 

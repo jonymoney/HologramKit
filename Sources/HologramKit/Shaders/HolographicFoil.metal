@@ -48,7 +48,8 @@ static float fbm(float2 p, int octaves) {
     float scale,
     float speed,
     float saturation,
-    float patternType
+    float patternType,
+    float transparency
 ) {
     if (color.a < 0.001h) return color;
 
@@ -132,8 +133,7 @@ static float fbm(float2 p, int octaves) {
     float hue = fract(pattern);
     half3 rainbow = hsv2rgb(half3(half(hue), half(saturation), 1.0h));
 
-    half h_intensity = half(intensity);
-    half3 blended = mix(color.rgb, rainbow, h_intensity);
-    half alpha = color.a * h_intensity;
+    half3 blended = mix(color.rgb, rainbow, half(intensity));
+    half alpha = color.a * (1.0h - half(transparency));
     return half4(blended * alpha, alpha);
 }

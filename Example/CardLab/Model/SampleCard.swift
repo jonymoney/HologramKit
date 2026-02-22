@@ -59,55 +59,34 @@ extension SampleCard {
 
             HologramLayer.group("Sun") {
                 HologramLayer.base(config.cardBaseColor)
-                HologramLayer.image(Image("sun"))
-                    .parallax(0.1)
-            }
-//            .parallax(0.25)
-            
-            HologramLayer.group("Mountain") {
-//                HologramLayer.plasticFoil()
                 HologramLayer.holographicFoil(config.cardBaseColor)
-                    .intensity(0.2)
+                    .intensity(0.8)
+                    .transparency(0.7)
                     .scale(1.0)
                     .speed(0.5)
                     .saturation(0.9)
-                    .pattern(.microFacet)
+                    .pattern(.waves)
+                HologramLayer.image(Image("sun"))
+                    .parallax(0.1)
                 HologramLayer.image(Image("mount"))
-
-
+                    .parallax(0.3)
             }
-            .parallax(0.45)
-
-//            HologramLayer.group("Flowers") {
-//                HologramLayer.image(Image("flower"))
-//                HologramLayer.sparkle()
-//                    .density(0.5)
-//                    .speed(3.0)
-//                    .size(1.0)
-//            }
-//            .parallax(0.4)
-
-//            HologramLayer.content {
-//                VStack(spacing: 8) {
-//                    Text("Mount Fuji")
-//                        .font(.system(size: 30, weight: .bold))
-//                    Text("JAPAN 2026")
-//                        .font(.system(size: 12, weight: .medium, design: .monospaced))
-//                        .tracking(4)
-//                    Spacer()
-//                }
-//                .padding(.top)
-//                .foregroundStyle(.white.opacity(0.9))
-//            }
-//            .parallax(0.2)
-
-
-//            HologramLayer.specularHighlight()
-//                .parallax(0.8)
-//                .intensity(0.4)
-//                .size(0.35)
-//                .falloff(1.2)
-//                .color(.white)
+            
+            HologramLayer.group("Flowers") {
+                HologramLayer.image(Image("flower"))
+                HologramLayer.sparkle()
+                    .density(0.5)
+                    .speed(3.0)
+                    .size(1.0)
+                HologramLayer.specularHighlight()
+                    .parallax(0.8)
+                    .intensity(0.3)
+                    .size(0.35)
+                    .falloff(1.2)
+                    .color(.white)
+                HologramLayer.plasticFoil()
+            }
+            .parallax(0.7)
         },
 
         // MARK: Nova – Brushed Silver Credit Card

@@ -46,7 +46,8 @@ struct LayerRenderer {
                         .float(layer.foilConfig.scale),
                         .float(layer.foilConfig.speed),
                         .float(layer.foilConfig.saturation),
-                        .float(Float(layer.foilConfig.pattern.rawValue))
+                        .float(Float(layer.foilConfig.pattern.rawValue)),
+                        .float(layer.foilConfig.transparency)
                     )
                 )
                 .applyBlendMode(layer.layerBlendMode ?? .overlay, isExploded: isExploded, defaultBlend: .overlay)
