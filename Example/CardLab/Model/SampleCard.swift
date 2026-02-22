@@ -10,7 +10,7 @@ struct SampleCard: Identifiable {
     let cornerRadius: CGFloat
     let cardWidth: CGFloat
     let cardHeight: CGFloat
-    let hasMetal: Bool
+    let customSections: [ControlSection]
     let content: (CardConfiguration) -> [HologramLayer]
 
     init(
@@ -21,7 +21,7 @@ struct SampleCard: Identifiable {
         cornerRadius: CGFloat = 20,
         cardWidth: CGFloat = 300,
         cardHeight: CGFloat = 420,
-        hasMetal: Bool = false,
+        customSections: [ControlSection] = [],
         @HologramLayerBuilder content: @escaping (CardConfiguration) -> [HologramLayer]
     ) {
         self.name = name
@@ -31,7 +31,7 @@ struct SampleCard: Identifiable {
         self.cornerRadius = cornerRadius
         self.cardWidth = cardWidth
         self.cardHeight = cardHeight
-        self.hasMetal = hasMetal
+        self.customSections = customSections
         self.content = content
     }
 
@@ -54,24 +54,32 @@ extension SampleCard {
             name: "Mount Fuji",
             subtitle: "JAPAN 2026",
             backgroundColor: .white,
-            cardBaseColor: Color(red: 82/255, green: 214/255, blue: 252/255)
+            cardBaseColor: Color(red: 82/255, green: 214/255, blue: 252/255),
+            customSections: [
+                ControlSection(title: "Holographic Foil", items: [
+                    .floatSlider(label: "Intensity", keyPath: \.foilIntensity, range: 0...1),
+                    .floatSlider(label: "Speed", keyPath: \.foilSpeed, range: 0...2),
+                    .floatSlider(label: "Saturation", keyPath: \.foilSaturation, range: 0...1),
+                    .floatSlider(label: "Transparency", keyPath: \.foilTransparency, range: 0...1),
+                ]),
+            ]
         ) { config in
 
             HologramLayer.group("Sun") {
                 HologramLayer.base(config.cardBaseColor)
                 HologramLayer.holographicFoil(config.cardBaseColor)
-                    .intensity(0.8)
-                    .transparency(0.7)
+                    .intensity(config.foilIntensity)
+                    .transparency(config.foilTransparency)
                     .scale(1.0)
-                    .speed(0.5)
-                    .saturation(0.9)
+                    .speed(config.foilSpeed)
+                    .saturation(config.foilSaturation)
                     .pattern(.waves)
                 HologramLayer.image(Image("sun"))
                     .parallax(0.1)
                 HologramLayer.image(Image("mount"))
                     .parallax(0.3)
             }
-            
+
             HologramLayer.group("Flowers") {
                 HologramLayer.image(Image("flower"))
                 HologramLayer.sparkle()
@@ -99,7 +107,17 @@ extension SampleCard {
             cornerRadius: 16,
             cardWidth: 340,
             cardHeight: 214,
-            hasMetal: true
+            customSections: [
+                ControlSection(title: "Anisotropic Light", items: [
+                    .floatSlider(label: "Intensity", keyPath: \.anisoLightIntensity, range: 0...1),
+                    .floatSlider(label: "Size", keyPath: \.anisoLightSize, range: 0.05...1),
+                    .floatSlider(label: "Stretch", keyPath: \.anisoLightStretch, range: 1...20),
+                    .floatSlider(label: "Softness", keyPath: \.anisoLightSoftness, range: 0.5...5),
+                ]),
+                ControlSection(title: "Metal", items: [
+                    .colorGrid(keyPath: \.cardBaseColor, options: MetalPreset.gridOptions),
+                ]),
+            ]
         ) { config in
             HologramLayer.brushedMetal(config.cardBaseColor)
                 .scale(1.0)

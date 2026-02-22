@@ -64,7 +64,7 @@ struct CardExplorerView: View {
             }
         }
         .sheet(isPresented: $showControlPanel) {
-            ControlPanelView(config: config, presetStore: presetStore, showMetalControls: sample.hasMetal)
+            ControlPanelView(config: config, presetStore: presetStore, customSections: sample.customSections)
                 .presentationDetents([.medium, .large])
         }
     }

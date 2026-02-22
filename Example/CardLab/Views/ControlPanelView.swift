@@ -26,12 +26,16 @@ enum MetalPreset: String, CaseIterable, Identifiable {
         case .platinum:  return Color(red: 0.90, green: 0.89, blue: 0.87)
         }
     }
+
+    static var gridOptions: [ColorGridOption] {
+        allCases.map { ColorGridOption(id: $0.rawValue, name: $0.name, color: $0.color) }
+    }
 }
 
 struct ControlPanelView: View {
     @Bindable var config: CardConfiguration
     var presetStore: PresetStore
-    var showMetalControls: Bool = false
+    var customSections: [ControlSection] = []
 
     @State private var showingSaveAlert = false
     @State private var presetName = ""
@@ -85,44 +89,11 @@ struct ControlPanelView: View {
                     SliderRow(label: "Tilt Degrees", value: $config.tiltIntensity, range: 0...45)
                 }
 
-                if showMetalControls {
-                    Section("Anisotropic Light") {
-                        SliderRow(label: "Intensity", value: $config.anisoLightIntensity, range: 0...1)
-                        SliderRow(label: "Size", value: $config.anisoLightSize, range: 0.05...1)
-                        SliderRow(label: "Stretch", value: $config.anisoLightStretch, range: 1...20)
-                        SliderRow(label: "Softness", value: $config.anisoLightSoftness, range: 0.5...5)
-                    }
-
-                    Section("Metal") {
-                    LazyVGrid(columns: [GridItem(.adaptive(minimum: 90))], spacing: 12) {
-                        ForEach(MetalPreset.allCases) { preset in
-                            Button {
-                                withAnimation(.easeInOut(duration: 0.3)) {
-                                    config.cardBaseColor = preset.color
-                                }
-                            } label: {
-                                VStack(spacing: 6) {
-                                    RoundedRectangle(cornerRadius: 8)
-                                        .fill(preset.color)
-                                        .frame(height: 44)
-                                        .overlay(
-                                            RoundedRectangle(cornerRadius: 8)
-                                                .strokeBorder(
-                                                    config.cardBaseColor == preset.color
-                                                        ? Color.accentColor
-                                                        : Color.clear,
-                                                    lineWidth: 2
-                                                )
-                                        )
-                                    Text(preset.name)
-                                        .font(.caption2)
-                                        .foregroundStyle(.primary)
-                                }
-                            }
-                            .buttonStyle(.plain)
+                ForEach(customSections) { section in
+                    Section(section.title) {
+                        ForEach(section.items) { item in
+                            controlView(for: item)
                         }
-                    }
-                    .padding(.vertical, 4)
                     }
                 }
 
@@ -146,5 +117,79 @@ struct ControlPanelView: View {
                 }
             }
         }
+    }
+
+    // MARK: - Dynamic Control Renderer
+
+    @ViewBuilder
+    private func controlView(for item: ControlItem) -> some View {
+        switch item {
+        case .floatSlider(let label, let keyPath, let range, let format):
+            SliderRow(
+                label: label,
+                value: Bindable(config)[dynamicMember: keyPath],
+                range: range,
+                format: format
+            )
+
+        case .doubleSlider(let label, let keyPath, let range, let format):
+            SliderRow(
+                label: label,
+                value: Bindable(config)[dynamicMember: keyPath],
+                range: range,
+                format: format
+            )
+
+        case .cgFloatSlider(let label, let keyPath, let range, let format):
+            SliderRow(
+                label: label,
+                value: Bindable(config)[dynamicMember: keyPath],
+                range: range,
+                format: format
+            )
+
+        case .colorPicker(let label, let keyPath):
+            ColorPicker(label, selection: Bindable(config)[dynamicMember: keyPath])
+
+        case .colorGrid(let keyPath, let options):
+            colorGridView(keyPath: keyPath, options: options)
+        }
+    }
+
+    @ViewBuilder
+    private func colorGridView(
+        keyPath: ReferenceWritableKeyPath<CardConfiguration, Color>,
+        options: [ColorGridOption]
+    ) -> some View {
+        let binding = Bindable(config)[dynamicMember: keyPath]
+        LazyVGrid(columns: [GridItem(.adaptive(minimum: 90))], spacing: 12) {
+            ForEach(options) { option in
+                Button {
+                    withAnimation(.easeInOut(duration: 0.3)) {
+                        binding.wrappedValue = option.color
+                    }
+                } label: {
+                    VStack(spacing: 6) {
+                        RoundedRectangle(cornerRadius: 8)
+                            .fill(option.color)
+                            .frame(height: 44)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 8)
+                                    .strokeBorder(
+                                        binding.wrappedValue == option.color
+                                            ? Color.accentColor
+                                            : Color.clear,
+                                        lineWidth: 2
+                                    )
+                            )
+                        Text(option.name)
+                            .font(.caption2)
+                            .foregroundStyle(.primary)
+                    }
+                }
+                .buttonStyle(.plain)
+            }
+        }
+        .padding(.vertical, 4)
     }
 }

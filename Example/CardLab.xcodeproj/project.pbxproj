@@ -11,13 +11,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		F5D51F442F45AEE80049C49D /* CardLab.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "CardLab.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		F5D51F442F45AEE80049C49D /* CardLab.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CardLab.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		F5D51F462F45AEE80049C49D /* CardLab */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			path = "CardLab";
+			path = CardLab;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -68,11 +68,11 @@
 			fileSystemSynchronizedGroups = (
 				F5D51F462F45AEE80049C49D /* CardLab */,
 			);
-			name = "CardLab";
+			name = CardLab;
 			packageProductDependencies = (
 				F5D51F602F45B0000049C49D /* HologramKit */,
 			);
-			productName = "CardLab";
+			productName = CardLab;
 			productReference = F5D51F442F45AEE80049C49D /* CardLab.app */;
 			productType = "com.apple.product-type.application";
 		};
@@ -104,9 +104,6 @@
 			productRefGroup = F5D51F452F45AEE80049C49D /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
-			packages = (
-				F5D51F5E2F45B0000049C49D /* XCLocalSwiftPackageReference ".." */,
-			);
 			targets = (
 				F5D51F432F45AEE80049C49D /* CardLab */,
 			);
@@ -275,7 +272,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "money.jony.exploration.CardLab";
+				PRODUCT_BUNDLE_IDENTIFIER = money.jony.exploration.CardLab;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
@@ -307,7 +304,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "money.jony.exploration.CardLab";
+				PRODUCT_BUNDLE_IDENTIFIER = money.jony.exploration.CardLab;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
@@ -345,7 +342,7 @@
 /* Begin XCLocalSwiftPackageReference section */
 		F5D51F5E2F45B0000049C49D /* XCLocalSwiftPackageReference ".." */ = {
 			isa = XCLocalSwiftPackageReference;
-			relativePath = "..";
+			relativePath = ..;
 		};
 /* End XCLocalSwiftPackageReference section */
 

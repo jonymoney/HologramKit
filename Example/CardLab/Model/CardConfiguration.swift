@@ -25,6 +25,12 @@ class CardConfiguration {
     var anisoLightStretch: Float = 8.0
     var anisoLightSoftness: Float = 2.0
 
+    // MARK: - Holographic Foil
+    var foilIntensity: Float = 0.8
+    var foilSpeed: Float = 0.5
+    var foilSaturation: Float = 0.9
+    var foilTransparency: Float = 0.5
+
     init(
         backgroundColor: Color = .white,
         cardBaseColor: Color = Color(red: 0.85, green: 0.65, blue: 0.13),
@@ -57,6 +63,10 @@ extension CardConfiguration {
         var anisoLightSize: Float
         var anisoLightStretch: Float
         var anisoLightSoftness: Float
+        var foilIntensity: Float?
+        var foilSpeed: Float?
+        var foilSaturation: Float?
+        var foilTransparency: Float?
     }
 
     func makeSnapshot() -> Snapshot {
@@ -73,7 +83,11 @@ extension CardConfiguration {
             anisoLightIntensity: anisoLightIntensity,
             anisoLightSize: anisoLightSize,
             anisoLightStretch: anisoLightStretch,
-            anisoLightSoftness: anisoLightSoftness
+            anisoLightSoftness: anisoLightSoftness,
+            foilIntensity: foilIntensity,
+            foilSpeed: foilSpeed,
+            foilSaturation: foilSaturation,
+            foilTransparency: foilTransparency
         )
     }
 
@@ -91,6 +105,10 @@ extension CardConfiguration {
         anisoLightSize = snapshot.anisoLightSize
         anisoLightStretch = snapshot.anisoLightStretch
         anisoLightSoftness = snapshot.anisoLightSoftness
+        if let v = snapshot.foilIntensity { foilIntensity = v }
+        if let v = snapshot.foilSpeed { foilSpeed = v }
+        if let v = snapshot.foilSaturation { foilSaturation = v }
+        if let v = snapshot.foilTransparency { foilTransparency = v }
     }
 
     static func colorToComponents(_ color: Color) -> [Double] {
