@@ -162,5 +162,76 @@ extension SampleCard {
                 .foregroundStyle(Color(white: 0.2))
             }
         },
+
+        // MARK: Aqua – Smoke Glass
+
+        SampleCard(
+            name: "Aqua",
+            subtitle: "Smoke Glass",
+            backgroundColor: Color(red: 0.04, green: 0.08, blue: 0.16),
+            cardBaseColor: Color(red: 0.10, green: 0.18, blue: 0.28),
+            customSections: [
+                ControlSection(title: "Smoke Glass", items: [
+                    .floatSlider(label: "Refraction", keyPath: \.glassRefraction, range: 0...1),
+                    .floatSlider(label: "Aberration", keyPath: \.glassAberration, range: 0...1),
+                    .floatSlider(label: "Clarity", keyPath: \.glassClarity, range: 0...1),
+                    .floatSlider(label: "Intensity", keyPath: \.glassIntensity, range: 0...1),
+                    .floatSlider(label: "Speed", keyPath: \.glassSpeed, range: 0...2),
+                    .floatSlider(label: "Edge Width", keyPath: \.glassEdgeWidth, range: 0.01...0.2),
+                ]),
+            ]
+        ) { config in
+            HologramLayer.base(config.cardBaseColor)
+
+            HologramLayer.group {
+                HologramLayer.smokeGlass()
+                    .refraction(config.glassRefraction)
+                    .aberration(config.glassAberration)
+                    .clarity(config.glassClarity)
+                    .intensity(config.glassIntensity)
+                    .speed(config.glassSpeed)
+                    .edgeWidth(config.glassEdgeWidth)
+                HologramLayer.content {
+                    VStack(spacing: 0) {
+                        Spacer()
+                        
+                        Image(systemName: "drop.fill")
+                            .font(.system(size: 48, weight: .ultraLight))
+                            .foregroundStyle(
+                                .linearGradient(
+                                    colors: [
+                                        Color(red: 0.4, green: 0.8, blue: 1.0),
+                                        Color(red: 0.6, green: 0.5, blue: 1.0),
+                                    ],
+                                    startPoint: .top,
+                                    endPoint: .bottom
+                                )
+                            )
+                        
+                        Spacer()
+                            .frame(height: 16)
+                        
+                        Text("AQUA")
+                            .font(.system(size: 22, weight: .heavy, design: .rounded))
+                            .tracking(8)
+                            .foregroundStyle(Color(white: 0.85))
+                        
+                        Text("smoke glass")
+                            .font(.system(size: 11, weight: .medium, design: .monospaced))
+                            .tracking(4)
+                            .foregroundStyle(Color(white: 0.45))
+                        
+                        Spacer()
+                    }
+                    .frame(maxWidth: .infinity)
+                }
+            }
+            .parallax(0.3)
+            
+            HologramLayer.specularHighlight()
+                .parallax(0)
+                .intensity(0.2)
+                .size(0.4)
+        },
     ]
 }

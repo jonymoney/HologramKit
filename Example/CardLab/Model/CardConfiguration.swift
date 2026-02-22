@@ -31,6 +31,14 @@ class CardConfiguration {
     var foilSaturation: Float = 0.9
     var foilTransparency: Float = 0.5
 
+    // MARK: - Smoke Glass
+    var glassRefraction: Float = 0.5
+    var glassAberration: Float = 0.3
+    var glassClarity: Float = 0.8
+    var glassIntensity: Float = 0.7
+    var glassSpeed: Float = 0.8
+    var glassEdgeWidth: Float = 0.04
+
     init(
         backgroundColor: Color = .white,
         cardBaseColor: Color = Color(red: 0.85, green: 0.65, blue: 0.13),

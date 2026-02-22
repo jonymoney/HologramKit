@@ -156,6 +156,33 @@ struct LayerRenderer {
             }
             .applyBlendMode(layer.layerBlendMode, isExploded: isExploded)
 
+        case .smokeGlass:
+            ZStack {
+                if isExploded {
+                    RoundedRectangle(cornerRadius: cornerRadius)
+                        .fill(Color(white: 0.1))
+                }
+                RoundedRectangle(cornerRadius: cornerRadius)
+                    .fill(.black)
+                    .colorEffect(
+                        HologramShaderLibrary.smokeGlass(
+                            .float2(Float(cardSize.width), Float(cardSize.height)),
+                            .float2(tiltR, tiltP),
+                            .float(time),
+                            .float(layer.smokeGlassConfig.refraction),
+                            .float(layer.smokeGlassConfig.edgeWidth),
+                            .float(layer.smokeGlassConfig.aberration),
+                            .float(layer.smokeGlassConfig.clarity),
+                            .float(layer.smokeGlassConfig.highlightSize),
+                            .float(layer.smokeGlassConfig.intensity),
+                            .float(layer.smokeGlassConfig.speed),
+                            .float(Float(cornerRadius))
+                        )
+                    )
+                    .blendMode(.screen)
+            }
+            .applyBlendMode(layer.layerBlendMode, isExploded: isExploded)
+
         case .group(let sublayers, _):
             ZStack {
                 ForEach(Array(sublayers.enumerated()), id: \.element.id) { _, sublayer in

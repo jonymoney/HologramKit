@@ -45,42 +45,39 @@ public struct HologramCard: View {
         TimelineView(.animation) { context in
             let time = Float(context.date.timeIntervalSince(startDate))
             let (tiltR, tiltP) = currentTilt
+
+            // When inspecting, freeze tilt so layers render in neutral state.
             let r: Float = isExploded ? 0 : tiltR
             let p: Float = isExploded ? 0 : tiltP
 
-            let totalLayers = CGFloat(layers.count)
-            let center = (totalLayers - 1) / 2
-
+            // Renderer always draws layers normally — the inspector only
+            // spreads them via offset, it never alters blend modes or backgrounds.
             let renderer = LayerRenderer(
                 cardSize: cardSize,
                 cornerRadius: cornerRadius,
-                isExploded: isExploded,
+                isExploded: false,
                 parallaxIntensity: parallaxIntensity
             )
 
             ZStack {
                 ForEach(Array(layers.enumerated()), id: \.element.id) { index, layer in
-                    renderer.render(layer: layer, tiltR: tiltR, tiltP: tiltP, time: time)
-                        .shadow(color: .black.opacity(isExploded ? 0.3 : 0), radius: 8, x: 0, y: 4)
+                    renderer.render(layer: layer, tiltR: r, tiltP: p, time: time)
+                        .shadow(color: .black.opacity(isExploded ? 0.15 : 0), radius: 6, x: 0, y: 4)
                         .inspectorLabel(layerName(for: layer), isExploded: isExploded)
-                        .offset(parallaxOffset(r: r, p: p, factor: layer.parallaxFactor))
-                        .explodeDepth(
-                            isExploded: isExploded,
-                            layerIndex: CGFloat(index),
-                            center: center,
-                            zSpacing: zSpacing
-                        )
+                        .offset(isExploded
+                            ? inspectorOffset(index: index, count: layers.count)
+                            : parallaxOffset(r: tiltR, p: tiltP, factor: layer.parallaxFactor))
                 }
             }
             .frame(width: cardSize.width, height: cardSize.height)
-            .scaleEffect(isExploded ? 0.6 : 1.0)
+            .scaleEffect(isExploded ? 0.55 : 1.0)
             .rotation3DEffect(
-                .degrees(isExploded ? 0 : Double(-p) * tiltIntensity),
+                .degrees(Double(-p) * tiltIntensity),
                 axis: (x: 1, y: 0, z: 0),
                 perspective: 0.4
             )
             .rotation3DEffect(
-                .degrees(isExploded ? 0 : -Double(r) * tiltIntensity),
+                .degrees(-Double(r) * tiltIntensity),
                 axis: (x: 0, y: 1, z: 0),
                 perspective: 0.4
             )
@@ -124,6 +121,12 @@ public struct HologramCard: View {
         )
     }
 
+    /// Fixed diagonal cascade offset per layer for the inspector view.
+    private func inspectorOffset(index: Int, count: Int) -> CGSize {
+        let step = CGFloat(index)
+        return CGSize(width: step * 25, height: -step * 15)
+    }
+
     private func layerName(for layer: HologramLayer) -> String {
         switch layer.kind {
         case .base: return "Base"
@@ -135,6 +138,7 @@ public struct HologramCard: View {
         case .brushedMetal: return "Brushed Metal"
         case .anisotropicLight: return "Aniso Light"
         case .plasticFoil: return "Plastic Foil"
+        case .smokeGlass: return "Smoke Glass"
         case .group(_, let name): return name ?? "Group"
         }
     }

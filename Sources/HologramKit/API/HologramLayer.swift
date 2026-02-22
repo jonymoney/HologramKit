@@ -22,6 +22,7 @@ public struct HologramLayer: Identifiable {
     var brushedMetalConfig: BrushedMetalConfig = BrushedMetalConfig()
     var anisotropicLightConfig: AnisotropicLightConfig = AnisotropicLightConfig()
     var plasticFoilConfig: PlasticFoilConfig = PlasticFoilConfig()
+    var smokeGlassConfig: SmokeGlassConfig = SmokeGlassConfig()
 
     enum Kind {
         case base(Color)
@@ -33,6 +34,7 @@ public struct HologramLayer: Identifiable {
         case brushedMetal(Color)
         case anisotropicLight
         case plasticFoil
+        case smokeGlass
         case group([HologramLayer], String?)
     }
 
@@ -86,6 +88,11 @@ public struct HologramLayer: Identifiable {
     /// A transparent plastic foil overlay with visible edge rims and a sliding specular sheen.
     public static func plasticFoil() -> HologramLayer {
         HologramLayer(kind: .plasticFoil)
+    }
+
+    /// A smoke glass overlay with animated caustics, Fresnel rim glow, and chromatic aberration.
+    public static func smokeGlass() -> HologramLayer {
+        HologramLayer(kind: .smokeGlass)
     }
 
     /// A compositing group that isolates blend modes within its sublayers.
@@ -146,6 +153,7 @@ public struct HologramLayer: Identifiable {
         case .brushedMetal: copy.brushedMetalConfig.reflectivity = value
         case .anisotropicLight: copy.anisotropicLightConfig.intensity = value
         case .plasticFoil: copy.plasticFoilConfig.intensity = value
+        case .smokeGlass: copy.smokeGlassConfig.intensity = value
         default: break
         }
         return copy
@@ -180,6 +188,7 @@ public struct HologramLayer: Identifiable {
         switch copy.kind {
         case .holographicFoil: copy.foilConfig.speed = value
         case .sparkle: copy.sparkleConfig.speed = value
+        case .smokeGlass: copy.smokeGlassConfig.speed = value
         default: break
         }
         return copy
@@ -247,6 +256,7 @@ public struct HologramLayer: Identifiable {
         case .sparkle: copy.sparkleConfig.size = value
         case .anisotropicLight: copy.anisotropicLightConfig.size = value
         case .plasticFoil: copy.plasticFoilConfig.shineSize = value
+        case .smokeGlass: copy.smokeGlassConfig.highlightSize = value
         default: break
         }
         return copy
@@ -341,8 +351,51 @@ public struct HologramLayer: Identifiable {
     ///   Lower = thinner rim, higher = wider glow. Default: `0.06`.
     public func edgeWidth(_ value: Float) -> HologramLayer {
         var copy = self
-        if case .plasticFoil = copy.kind {
-            copy.plasticFoilConfig.edgeWidth = value
+        switch copy.kind {
+        case .plasticFoil: copy.plasticFoilConfig.edgeWidth = value
+        case .smokeGlass: copy.smokeGlassConfig.edgeWidth = value
+        default: break
+        }
+        return copy
+    }
+
+    // MARK: - Smoke Glass Modifiers
+
+    /// Caustic refraction pattern strength.
+    ///
+    /// Applies to: `smokeGlass`. No-op on other layer types.
+    ///
+    /// - Parameter value: **Range: `0.0 ... 1.0`**. `0` = no caustics, `1` = full refraction. Default: `0.5`.
+    public func refraction(_ value: Float) -> HologramLayer {
+        var copy = self
+        if case .smokeGlass = copy.kind {
+            copy.smokeGlassConfig.refraction = value
+        }
+        return copy
+    }
+
+    /// Chromatic aberration strength — color fringing at edges and caustic peaks.
+    ///
+    /// Applies to: `smokeGlass`. No-op on other layer types.
+    ///
+    /// - Parameter value: **Range: `0.0 ... 1.0`**. `0` = no aberration, `1` = heavy fringing. Default: `0.3`.
+    public func aberration(_ value: Float) -> HologramLayer {
+        var copy = self
+        if case .smokeGlass = copy.kind {
+            copy.smokeGlassConfig.aberration = value
+        }
+        return copy
+    }
+
+    /// Glass clarity — how transparent vs frosted the glass appears.
+    ///
+    /// Applies to: `smokeGlass`. No-op on other layer types.
+    ///
+    /// - Parameter value: **Range: `0.0 ... 1.0`**. `1` = clear glass with sharp caustics, `0` = frosted/diffused. Default: `0.8`.
+    public func clarity(_ value: Float) -> HologramLayer {
+        var copy = self
+        if case .smokeGlass = copy.kind {
+            copy.smokeGlassConfig.clarity = value
         }
         return copy
     }
@@ -391,4 +444,14 @@ struct PlasticFoilConfig {
     var edgeWidth: Float = 0.06
     var intensity: Float = 0.6
     var shineSize: Float = 0.5
+}
+
+struct SmokeGlassConfig {
+    var refraction: Float = 0.5
+    var edgeWidth: Float = 0.08
+    var aberration: Float = 0.3
+    var clarity: Float = 0.8
+    var highlightSize: Float = 0.4
+    var intensity: Float = 0.7
+    var speed: Float = 0.8
 }
