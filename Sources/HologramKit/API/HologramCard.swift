@@ -62,6 +62,11 @@ public struct HologramCard: View {
             ZStack {
                 ForEach(Array(layers.enumerated()), id: \.element.id) { index, layer in
                     renderer.render(layer: layer, tiltR: r, tiltP: p, time: time)
+                        .overlay(isExploded
+                            ? RoundedRectangle(cornerRadius: cornerRadius)
+                                .strokeBorder(Color.white.opacity(0.25), lineWidth: 1)
+                            : nil
+                        )
                         .shadow(color: .black.opacity(isExploded ? 0.15 : 0), radius: 6, x: 0, y: 4)
                         .inspectorLabel(layerName(for: layer), isExploded: isExploded)
                         .offset(isExploded
@@ -70,7 +75,7 @@ public struct HologramCard: View {
                 }
             }
             .frame(width: cardSize.width, height: cardSize.height)
-            .scaleEffect(isExploded ? 0.55 : 1.0)
+            .scaleEffect(isExploded ? 0.8 : 1.0)
             .rotation3DEffect(
                 .degrees(Double(-p) * tiltIntensity),
                 axis: (x: 1, y: 0, z: 0),
@@ -121,10 +126,12 @@ public struct HologramCard: View {
         )
     }
 
-    /// Fixed diagonal cascade offset per layer for the inspector view.
+    /// Fixed diagonal cascade offset per layer for the inspector view,
+    /// centered so the middle of the stack sits at the card's origin.
     private func inspectorOffset(index: Int, count: Int) -> CGSize {
-        let step = CGFloat(index)
-        return CGSize(width: step * 25, height: -step * 15)
+        let mid = CGFloat(count - 1) / 2.0
+        let step = CGFloat(index) - mid
+        return CGSize(width: step * 60, height: step * 44)
     }
 
     private func layerName(for layer: HologramLayer) -> String {

@@ -33,10 +33,9 @@ struct HomeView: View {
         let scale = 160.0 / sample.cardWidth
         let miniWidth = 160.0
         let miniHeight = sample.cardHeight * scale
+        let tallest = SampleCard.catalog.map { $0.cardHeight * (160.0 / $0.cardWidth) }.max() ?? miniHeight
 
         return VStack(spacing: 12) {
-            Spacer(minLength: 0)
-
             HologramCard {
                 for layer in sample.content(sample.makeDefaultConfig()) {
                     layer
@@ -45,6 +44,7 @@ struct HomeView: View {
             .cardSize(width: miniWidth, height: miniHeight)
             .hologramCornerRadius(sample.cornerRadius * scale)
             .allowsHitTesting(false)
+            .frame(height: tallest, alignment: .bottom)
 
             VStack(spacing: 2) {
                 Text(sample.name)
