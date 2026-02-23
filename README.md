@@ -1,9 +1,7 @@
 # HologramKit
 
 A SwiftUI framework for building layered, motion-reactive holographic card effects with Metal shaders.
-
-<!-- TODO: Add hero screenshot/gif -->
-![HologramKit Hero](screenshots/hero.png)
+<img width="320" alt="HologramKit Hero" src="https://github.com/user-attachments/assets/108fd45f-49ed-449d-8326-b99d4ca36e21" />
 
 ## Features
 
@@ -19,10 +17,28 @@ A SwiftUI framework for building layered, motion-reactive holographic card effec
 
 ## Screenshots
 
-<!-- TODO: Replace with actual screenshots -->
-| Mount Fuji | Nova | Aqua |
-|:---:|:---:|:---:|
-| ![Mount Fuji](screenshots/fuji.png) | ![Nova](screenshots/nova.png) | ![Aqua](screenshots/aqua.png) |
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: center;">Mount Fuji</th>
+      <th style="text-align: center;">Nova</th>
+      <th style="text-align: center;">Aqua</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: center;">
+        <img src="https://github.com/user-attachments/assets/9019bcda-ae6c-4108-b1a2-0261df9a9f83" alt="Mount Fuji" />
+      </td>
+      <td style="text-align: center;">
+        <img src="https://github.com/user-attachments/assets/31e4f22a-2a82-45b3-9390-8bd541b3ba91" alt="Nova" />
+      </td>
+      <td style="text-align: center;">
+        <img src="https://github.com/user-attachments/assets/15e77828-5a1a-42e7-993e-a888a2bcbc4b" alt="Aqua" />
+      </td>
+    </tr>
+  </tbody>
+</table>
 
 ## Requirements
 
@@ -44,7 +60,7 @@ Or add it to your `Package.swift`:
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/<your-org>/HologramKit.git", from: "0.1.0")
+    .package(url: "https://github.com/jonymoney/HologramKit.git", from: "0.1.0")
 ]
 ```
 
