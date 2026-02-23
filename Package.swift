@@ -8,7 +8,7 @@ let package = Package(
         .iOS(.v18)
     ],
     products: [
-        .library(name: "HologramKit", targets: ["HologramKit"]),
+        .library(name: "HologramKit", targets: ["HologramKit"])
     ],
     targets: [
         .target(
@@ -23,6 +23,6 @@ let package = Package(
         .testTarget(
             name: "HologramKitTests",
             dependencies: ["HologramKit"]
-        ),
+        )
     ]
 )

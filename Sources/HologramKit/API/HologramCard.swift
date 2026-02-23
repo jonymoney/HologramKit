@@ -29,26 +29,27 @@ public struct HologramCard: View {
     @Environment(\.hologramMotionSensitivity) private var motionSensitivity
     @Environment(\.hologramMotionSmoothing) private var motionSmoothing
     @Environment(\.hologramInspectorPresented) private var isExploded
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     private let layers: [HologramLayer]
 
     @State private var motionManager = MotionManager()
     @State private var startDate = Date()
 
-    private let zSpacing: CGFloat = 140
-
     public init(@HologramLayerBuilder content: () -> [HologramLayer]) {
         self.layers = content()
     }
 
     public var body: some View {
-        TimelineView(.animation) { context in
+        TimelineView(.animation(paused: reduceMotion)) { context in
             let time = Float(context.date.timeIntervalSince(startDate))
+            let effectiveTime: Float = reduceMotion ? 0 : time
             let (tiltR, tiltP) = currentTilt
 
-            // When inspecting, freeze tilt so layers render in neutral state.
-            let r: Float = isExploded ? 0 : tiltR
-            let p: Float = isExploded ? 0 : tiltP
+            // When inspecting or reducing motion, freeze tilt so layers render in neutral state.
+            let frozen = isExploded || reduceMotion
+            let r: Float = frozen ? 0 : tiltR
+            let p: Float = frozen ? 0 : tiltP
 
             // Renderer always draws layers normally — the inspector only
             // spreads them via offset, it never alters blend modes or backgrounds.
@@ -61,7 +62,7 @@ public struct HologramCard: View {
 
             ZStack {
                 ForEach(Array(layers.enumerated()), id: \.element.id) { index, layer in
-                    renderer.render(layer: layer, tiltR: r, tiltP: p, time: time)
+                    renderer.render(layer: layer, tiltR: r, tiltP: p, time: effectiveTime)
                         .overlay(isExploded
                             ? RoundedRectangle(cornerRadius: cornerRadius)
                                 .strokeBorder(Color.white.opacity(0.25), lineWidth: 1)
@@ -71,7 +72,7 @@ public struct HologramCard: View {
                         .inspectorLabel(layerName(for: layer), isExploded: isExploded)
                         .offset(isExploded
                             ? inspectorOffset(index: index, count: layers.count)
-                            : parallaxOffset(r: tiltR, p: tiltP, factor: layer.parallaxFactor))
+                            : parallaxOffset(r: r, p: p, factor: layer.parallaxFactor))
                 }
             }
             .frame(width: cardSize.width, height: cardSize.height)

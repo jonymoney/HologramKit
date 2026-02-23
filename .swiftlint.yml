@@ -1,0 +1,13 @@
+line_length: 140
+type_body_length: 500
+file_length: 500
+function_body_length: 200
+cyclomatic_complexity: 20
+
+disabled_rules:
+  - identifier_name
+  - large_tuple
+
+excluded:
+  - .build/
+  - Example/

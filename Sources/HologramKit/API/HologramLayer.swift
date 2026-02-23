@@ -14,7 +14,7 @@ public struct HologramLayer: Identifiable {
 
     var kind: Kind
     var parallaxFactor: Double = 0
-    var layerBlendMode: BlendMode? = nil
+    var layerBlendMode: BlendMode?
     var layerOpacity: Double = 1.0
     var foilConfig: HoloFoilConfig = HoloFoilConfig()
     var specularConfig: SpecularConfig = SpecularConfig()
@@ -57,7 +57,9 @@ public struct HologramLayer: Identifiable {
 
     /// A rainbow holographic foil effect driven by device tilt.
     public static func holographicFoil(_ baseColor: Color = Color(red: 0.85, green: 0.65, blue: 0.13)) -> HologramLayer {
-        HologramLayer(kind: .holographicFoil(baseColor))
+        var layer = HologramLayer(kind: .holographicFoil(baseColor))
+        layer.parallaxFactor = 0.5
+        return layer
     }
 
     /// A tilt-tracking specular highlight.
