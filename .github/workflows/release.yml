@@ -1,0 +1,59 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - '[0-9]+.[0-9]+.[0-9]+'
+
+jobs:
+  validate:
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build
+        run: >
+          xcodebuild build
+          -scheme HologramKit
+          -destination 'platform=iOS Simulator,name=iPhone 16'
+          -skipPackagePluginValidation
+
+      - name: Test
+        run: >
+          xcodebuild test
+          -scheme HologramKit
+          -destination 'platform=iOS Simulator,name=iPhone 16'
+          -skipPackagePluginValidation
+
+      - name: Lint
+        run: swiftlint lint --strict
+
+  release:
+    needs: validate
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Extract changelog for this version
+        id: changelog
+        run: |
+          VERSION="${GITHUB_REF_NAME}"
+          # Extract the section for this version from CHANGELOG.md
+          NOTES=$(awk "/^## \[${VERSION}\]/{found=1; next} /^## \[/{if(found) exit} found" CHANGELOG.md)
+          if [ -z "$NOTES" ]; then
+            NOTES="Release ${VERSION}"
+          fi
+          {
+            echo "notes<<EOF"
+            echo "$NOTES"
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: HologramKit ${{ github.ref_name }}
+          body: ${{ steps.changelog.notes }}
+          generate_release_notes: false
