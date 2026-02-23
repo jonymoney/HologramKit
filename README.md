@@ -28,13 +28,13 @@ A SwiftUI framework for building layered, motion-reactive holographic card effec
   <tbody>
     <tr>
       <td style="text-align: center;">
-        <img src="https://github.com/user-attachments/assets/9019bcda-ae6c-4108-b1a2-0261df9a9f83" alt="Mount Fuji" />
+        <video src="https://github.com/user-attachments/assets/9019bcda-ae6c-4108-b1a2-0261df9a9f83" alt="Mount Fuji" controls/>
       </td>
       <td style="text-align: center;">
-        <img src="https://github.com/user-attachments/assets/31e4f22a-2a82-45b3-9390-8bd541b3ba91" alt="Nova" />
+        <video src="https://github.com/user-attachments/assets/31e4f22a-2a82-45b3-9390-8bd541b3ba91" alt="Nova" controls/>
       </td>
       <td style="text-align: center;">
-        <img src="https://github.com/user-attachments/assets/15e77828-5a1a-42e7-993e-a888a2bcbc4b" alt="Aqua" />
+        <video src="https://github.com/user-attachments/assets/15e77828-5a1a-42e7-993e-a888a2bcbc4b" alt="Aqua" controls/>
       </td>
     </tr>
   </tbody>
