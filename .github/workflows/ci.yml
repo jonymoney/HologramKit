@@ -1,0 +1,30 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build-and-test:
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build
+        run: >
+          xcodebuild build
+          -scheme HologramKit
+          -destination 'platform=iOS Simulator,name=iPhone 16'
+          -skipPackagePluginValidation
+
+      - name: Test
+        run: >
+          xcodebuild test
+          -scheme HologramKit
+          -destination 'platform=iOS Simulator,name=iPhone 16'
+          -skipPackagePluginValidation
+
+      - name: Lint
+        run: swiftlint lint --strict
